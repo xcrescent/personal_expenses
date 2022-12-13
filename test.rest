@@ -20,7 +20,7 @@ POST https://auth-backend-production-054a.up.railway.app/api/v1/auth/send-otp
 Content-Type: application/json
 
 {
-    "email":"utkarsh2110024@akgec.ac.in"
+    "email":"usjadon19@gmail.com"
 }
 
 ###
@@ -31,6 +31,16 @@ Content-Type: application/json
 {
     "email":"utkarsh2110024@akgec.ac.in",
     "password": "150783Pn@"
+}
+###
+
+POST https://auth-backend-production-054a.up.railway.app/api/v1/auth/reset
+Content-Type: application/json
+
+{
+    "otp": 775481,
+    "email":"usjadon19@gmail.com",
+    "new_password":"Harsh16@auth"
 }
 
 ### 

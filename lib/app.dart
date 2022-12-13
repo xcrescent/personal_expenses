@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:personal_expenses/screens/auth/forgot_pass.dart';
+import 'package:personal_expenses/screens/auth/login_screen.dart';
 import 'package:personal_expenses/screens/auth/signup_screen.dart';
 import 'package:personal_expenses/screens/auth/verify_otp.dart';
 import 'package:personal_expenses/screens/ui/home.dart';
@@ -22,9 +24,9 @@ class MaterialStoreApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white.withOpacity(0.95),
       ),
       routes: {
-        '/': (context) => const HomeScreen(),
-        '/signup': (context) => const SignUpActivity(),
-        '/verifyOtp': (context) => const VerifyOtpActivity(),
+        '/': (context) => const SignUpActivity(),
+        '/login': (context) => const LoginActivity(),
+        '/forgotPass':(context) => const ForgotPassActivity(),
       },
     );
   }

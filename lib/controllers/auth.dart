@@ -7,11 +7,7 @@ class AuthController {
     final response = await http.post(
         Uri.parse(
             'https://auth-backend-production-054a.up.railway.app/api/v1/auth/signup'),
-        body: json.encode({
-          "name": fname,
-          "email": email,
-          "password": pass
-        }));
+        body: json.encode({"name": fname, "email": email, "password": pass}));
     if (response.statusCode == 200) {
       return "success";
     } else {
@@ -19,23 +15,23 @@ class AuthController {
     }
   }
 
-  Future<String> signInUsingOtp() async {
-    final response = await http.post(
-        Uri.parse(
-            'https://auth-backend-production-054a.up.railway.app/api/v1/auth/send-otp'),
-        body: json.encode({"email": "utkarsh2110024@akgec.ac.in"}));
-    if (response.statusCode == 200) {
-      return "success";
-    } else {
-      return "bad request";
-    }
-  }
-
-  Future signInVerifyOtp(int otp) async {
+  Future signUpVerifyOtp(int otp, String email) async {
     final response = await http.post(
         Uri.parse(
             'https://auth-backend-production-054a.up.railway.app/api/v1/auth/verify'),
-        body: json.encode({"otp": otp, "email": "utkarsh2110024@akgec.ac.in"}));
+        body: json.encode({"otp": otp, "email": email}));
+    if (response.statusCode == 200) {
+      return "success";
+    } else {
+      return "bad request";
+    }
+  }
+
+  Future<String> sendOtp(email) async {
+    final response = await http.post(
+        Uri.parse(
+            'https://auth-backend-production-054a.up.railway.app/api/v1/auth/send-otp'),
+        body: json.encode({"email": email}));
     if (response.statusCode == 200) {
       return "success";
     } else {
@@ -45,9 +41,9 @@ class AuthController {
 
   Future<String> signInUsingEmailPassword(email, pass) async {
     final response = await http.post(
-        Uri.parse('https://auth-backend-production-054a.up.railway.app/api/v1/auth/login'),
-        body: json.encode(
-            {"email": email, "password": pass}));
+        Uri.parse(
+            'https://auth-backend-production-054a.up.railway.app/api/v1/auth/login'),
+        body: json.encode({"email": email, "password": pass}));
     if (response.statusCode == 200) {
       AccessToken accessTokens = accessTokenFromJson(response.body);
       print(accessTokens.accessToken);
@@ -57,10 +53,18 @@ class AuthController {
     }
   }
 
-  Future resetPasswordUsingOtp(email) async {
+  Future resetPasswordUsingOtp(otp, email, newPass) async {
     final response = await http.post(
-        Uri.parse('https://auth-backend-production-054a.up.railway.app/api/v1/auth/reset'),
-        body: json.encode({"email": email}));
+      Uri.parse(
+          'https://auth-backend-production-054a.up.railway.app/api/v1/auth/reset'),
+      body: json.encode(
+        {
+          "otp": otp,
+          "email": email,
+          "new_password": newPass
+        },
+      ),
+    );
     if (response.statusCode == 200) {
       return "success";
     } else {

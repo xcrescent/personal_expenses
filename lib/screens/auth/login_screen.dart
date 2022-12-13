@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:personal_expenses/controllers/auth.dart';
+import 'package:personal_expenses/screens/ui/home.dart';
 import 'package:personal_expenses/utils/colors.dart';
 
 class LoginActivity extends StatefulWidget {
@@ -40,8 +41,8 @@ class _LoginActivity extends State<LoginActivity>
     setState(() {
       _isLoading = true;
     });
-    String res = await AuthController().signInUsingEmailPassword(
-        _emailController.text, _passController.text);
+    String res = await AuthController()
+        .signInUsingEmailPassword(_emailController.text, _passController.text);
     if (res != 'success') {
       setState(() {
         _isLoading = false;
@@ -52,7 +53,8 @@ class _LoginActivity extends State<LoginActivity>
       if (!mounted) return;
       showSnackBarr(
           'Congratulations you have been successfully signed in..', context);
-      return Navigator.of(context).pushReplacementNamed('/home');
+      return Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const HomeScreen()));
     }
   }
 
@@ -90,10 +92,13 @@ class _LoginActivity extends State<LoginActivity>
                   filled: true,
                   border: OutlineInputBorder(borderSide: BorderSide.none),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
+                    borderSide: BorderSide(color: buttonColor),
                   ),
                   labelText: 'Enter email address',
-                  labelStyle: TextStyle(color: buttonColor),
+                  labelStyle: TextStyle(
+                    color: buttonColor,
+                    fontFamily: 'Poppins',
+                  ),
                   prefixIcon: Icon(
                     Icons.email,
                     color: buttonColor,
@@ -112,10 +117,13 @@ class _LoginActivity extends State<LoginActivity>
                   filled: true,
                   border: OutlineInputBorder(borderSide: BorderSide.none),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
+                    borderSide: BorderSide(color: buttonColor),
                   ),
                   labelText: 'Enter password',
-                  labelStyle: TextStyle(color: buttonColor),
+                  labelStyle: TextStyle(
+                    color: buttonColor,
+                    fontFamily: 'Poppins',
+                  ),
                   prefixIcon: Icon(
                     Icons.lock,
                     color: buttonColor,
@@ -133,7 +141,7 @@ class _LoginActivity extends State<LoginActivity>
                 },
                 style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 50),
-                    backgroundColor: Colors.black,
+                    backgroundColor: buttonColor,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
                       30,
@@ -144,10 +152,16 @@ class _LoginActivity extends State<LoginActivity>
                           color: Colors.white,
                         ),
                       )
-                    : const Text("Login", style: TextStyle(fontSize: 16)),
+                    : const Text(
+                        "Login",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
               ),
               const SizedBox(
-                height: 20,
+                height: 25,
               ),
               InkWell(
                 onTap: () {
@@ -156,21 +170,25 @@ class _LoginActivity extends State<LoginActivity>
                 child: const Text(
                   "Forgot Password?",
                   style: TextStyle(
-                      fontSize: 19,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold),
+                    fontSize: 19,
+                    color: buttonColor,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Poppins',
+                  ),
                 ),
               ),
               const SizedBox(
-                height: 40,
+                height: 30,
               ),
               Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    const Text(
+                    Text(
                       "New User?",
                       style: TextStyle(
                         fontSize: 19,
+                        color: buttonColor.withOpacity(0.8),
+                        fontFamily: 'Poppins',
                         // fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -179,38 +197,25 @@ class _LoginActivity extends State<LoginActivity>
                     ),
                     InkWell(
                       onTap: () {
-                        Navigator.of(context).pushReplacementNamed('/signup');
+                        Navigator.of(context).pushReplacementNamed('/');
                       },
-                      child: const Text(
-                        "SIGN UP",
-                        style: TextStyle(
-                            fontSize: 23,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
+                      child: Container(
+                        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20))),
+                        child: const Text(
+                          "SIGN UP",
+                          style: TextStyle(
+                              fontSize: 23,
+                              fontFamily: 'Poppins',
+                              color: buttonColor,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ]),
-              const SizedBox(
-                height: 40,
-              ),
-              FloatingActionButton(
-                onPressed: () async {
-                  
-                },
-                backgroundColor: Colors.transparent,
-
-                child: Image.asset('assets/images/google.png'),
-                // shape:
-              ),
-              const SizedBox(
-                height: 100,
-              ),
-              Text(T),
-              const Divider(),
             ],
           ),
         ),
       ),
     );
-  } 
+  }
 }

@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:personal_expenses/controllers/auth.dart';
-import 'package:personal_expenses/screens/auth/reset_pass.dart';
 import 'package:personal_expenses/utils/colors.dart';
 
-class ForgotPassActivity extends StatefulWidget {
-  const ForgotPassActivity({super.key});
-
+class ResetPassActivity extends StatefulWidget {
+  const ResetPassActivity({super.key, required this.email});
+  final String email;
   @override
-  State<ForgotPassActivity> createState() => _ForgotPassActivity();
+  State<ResetPassActivity> createState() => _ResetPassActivity();
 }
 
-class _ForgotPassActivity extends State<ForgotPassActivity> {
+class _ResetPassActivity extends State<ResetPassActivity> {
   bool _isLoading = false;
-  final _emailController = TextEditingController();
-
-  sendOtp() async {
+  final _otpController = TextEditingController();
+  final _passController = TextEditingController();
+  resetPass() async {
     setState(() {
       _isLoading = true;
     });
-    String res = await AuthController().sendOtp(_emailController.text);
+    String res =
+        await AuthController().resetPasswordUsingOtp(int.parse(_otpController.text), widget.email, _passController.text);
     if (res != 'success') {
       setState(() {
         _isLoading = false;
@@ -27,19 +27,15 @@ class _ForgotPassActivity extends State<ForgotPassActivity> {
       return showSnackBarr(res, context);
     } else {
       if (!mounted) return;
-      showSnackBarr('Verify the otp sent to this email address', context);
-      return Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => ResetPassActivity(email: _emailController.text),
-      ));
+      showSnackBarr('Password has been successfully changed', context);
+      return Navigator.of(context).pushReplacementNamed('/login');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          // backgroundColor: Colors.transparent,
-          ),
+      appBar: AppBar(),
       body: Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.all(20),
@@ -63,18 +59,35 @@ class _ForgotPassActivity extends State<ForgotPassActivity> {
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: buttonColor),
                   ),
-                  labelText: 'Enter Email',
+                  labelText: 'Enter OTP',
                   labelStyle: TextStyle(
                     color: buttonColor,
                   )),
-              controller: _emailController,
+              controller: _otpController,
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            TextFormField(
+              cursorColor: buttonColor,
+              decoration: const InputDecoration(
+                  filled: true,
+                  border: OutlineInputBorder(borderSide: BorderSide.none),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: buttonColor),
+                  ),
+                  labelText: 'Enter New Pass',
+                  labelStyle: TextStyle(
+                    color: buttonColor,
+                  )),
+              controller: _passController,
             ),
             const SizedBox(
               height: 30,
             ),
             ElevatedButton(
               onPressed: () {
-                sendOtp();
+                resetPass();
               },
               style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 50),
@@ -89,10 +102,8 @@ class _ForgotPassActivity extends State<ForgotPassActivity> {
                         color: Colors.white,
                       ),
                     )
-                  : const Text(
-                      "Reset Password",
-                      style: TextStyle(fontSize: 17),
-                    ),
+                  : const Text("Reset Password",
+                      style: TextStyle(fontSize: 17)),
             ),
           ],
         ),
