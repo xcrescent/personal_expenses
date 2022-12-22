@@ -36,78 +36,84 @@ class _ResetPassActivity extends State<ResetPassActivity> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 130,
-            ),
-            const Text(
-              "Forgot Password",
-              style: TextStyle(fontSize: 28, color: Colors.black),
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            TextFormField(
-              cursorColor: buttonColor,
-              decoration: const InputDecoration(
-                  filled: true,
-                  border: OutlineInputBorder(borderSide: BorderSide.none),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: buttonColor),
-                  ),
-                  labelText: 'Enter OTP',
-                  labelStyle: TextStyle(
-                    color: buttonColor,
-                  )),
-              controller: _otpController,
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            TextFormField(
-              cursorColor: buttonColor,
-              decoration: const InputDecoration(
-                  filled: true,
-                  border: OutlineInputBorder(borderSide: BorderSide.none),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: buttonColor),
-                  ),
-                  labelText: 'Enter New Pass',
-                  labelStyle: TextStyle(
-                    color: buttonColor,
-                  )),
-              controller: _passController,
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                resetPass();
-              },
-              style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 50),
-                  backgroundColor: buttonColor,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                    30,
-                  ))),
-              child: _isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ),
-                    )
-                  : const Text("Reset Password",
-                      style: TextStyle(fontSize: 17)),
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 130,
+              ),
+              const Text(
+                "Forgot Password",
+                style: TextStyle(fontSize: 28, color: Colors.black),
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              TextFormField(
+                cursorColor: buttonColor,
+                decoration: const InputDecoration(
+                    filled: true,
+                    border: OutlineInputBorder(borderSide: BorderSide.none),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: buttonColor),
+                    ),
+                    labelText: 'Enter OTP',
+                    labelStyle: TextStyle(
+                      color: buttonColor,
+                    )),
+                controller: _otpController,
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              TextFormField(
+                cursorColor: buttonColor,
+                decoration: const InputDecoration(
+                    filled: true,
+                    border: OutlineInputBorder(borderSide: BorderSide.none),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: buttonColor),
+                    ),
+                    labelText: 'Enter New Pass',
+                    labelStyle: TextStyle(
+                      color: buttonColor,
+                    )),
+                controller: _passController,
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  resetPass();
+                },
+                style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 50),
+                    backgroundColor: buttonColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                      30,
+                    ))),
+                child: _isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text("Reset Password",
+                        style: TextStyle(fontSize: 17)),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+}
+
+showSnackBarr(String content, BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(content)));
 }

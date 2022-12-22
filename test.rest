@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
     "name":"Utkarsh Singh",
-    "email":"utkarsh2110024@akgec.ac.in",
+    "email":"admin@tecrun.tech",
     "password": "150783Pn@"
 }
 ###
@@ -11,8 +11,8 @@ POST https://auth-backend-production-054a.up.railway.app/api/v1/auth/verify
 Content-Type: application/json
 
 {
-    "otp":922395,
-    "email":"utkarsh2110024@akgec.ac.in"
+    "otp":524957,
+    "email":"admin@tecrun.tech"
 }
 
 ###
@@ -29,7 +29,7 @@ POST https://auth-backend-production-054a.up.railway.app/api/v1/auth/login
 Content-Type: application/json
 
 {
-    "email":"utkarsh2110024@akgec.ac.in",
+    "email":"whataboutadate@gmail.com",
     "password": "150783Pn@"
 }
 ###
@@ -45,3 +45,4 @@ Content-Type: application/json
 
 ### 
 GET https://auth-backend-production-054a.up.railway.app/api/v1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ3aGF0YWJvdXRhZGF0ZUBnbWFpbC5jb20iLCJzdWIiOiJBQ0NFU1MiLCJleHAiOjE2NzIxNDM1NDV9.gqqqqc9-m_E8Y_QKuU3TFisBWLF2TcEjs0jzvcE8fFY

@@ -1,7 +1,11 @@
+// new pass , login regex,
+// default login on signup and pass change
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:personal_expenses/controllers/auth.dart';
+import 'package:personal_expenses/controllers/db.dart';
+import 'package:personal_expenses/screens/auth/signup_screen.dart';
 import 'package:personal_expenses/screens/ui/home.dart';
 import 'package:personal_expenses/utils/colors.dart';
 
@@ -17,7 +21,7 @@ class _LoginActivity extends State<LoginActivity>
   bool _isLoading = false;
   final _emailController = TextEditingController();
   final _passController = TextEditingController();
-
+  late DataBaseCon handler;
   bool activeConnection = false;
   String T = "";
   Future checkUserConnection() async {
@@ -41,20 +45,27 @@ class _LoginActivity extends State<LoginActivity>
     setState(() {
       _isLoading = true;
     });
-    String res = await AuthController()
+    Map res = await AuthController()
         .signInUsingEmailPassword(_emailController.text, _passController.text);
-    if (res != 'success') {
+    String name = await AuthController().authChanges(res['accessToken']);
+    if (res['status'] != 'success') {
       setState(() {
         _isLoading = false;
       });
       if (!mounted) return;
-      return showSnackBarr(res, context);
+      return showSnackBarr(res['status'], context);
     } else {
       if (!mounted) return;
       showSnackBarr(
           'Congratulations you have been successfully signed in..', context);
       return Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomeScreen()));
+        MaterialPageRoute(
+          builder: (context) => HomeScreen(
+            name: name,
+            res: res,
+          ),
+        ),
+      );
     }
   }
 
@@ -161,7 +172,7 @@ class _LoginActivity extends State<LoginActivity>
                       ),
               ),
               const SizedBox(
-                height: 25,
+                height: 20,
               ),
               InkWell(
                 onTap: () {
@@ -172,50 +183,83 @@ class _LoginActivity extends State<LoginActivity>
                   style: TextStyle(
                     fontSize: 19,
                     color: buttonColor,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     fontFamily: 'Poppins',
                   ),
                 ),
               ),
               const SizedBox(
-                height: 30,
+                height: 25,
               ),
               Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      "New User?",
-                      style: TextStyle(
-                        fontSize: 19,
-                        color: buttonColor.withOpacity(0.8),
-                        fontFamily: 'Poppins',
-                        // fontWeight: FontWeight.bold,
-                      ),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "Don't have an account?",
+                    style: TextStyle(
+                      fontSize: 19,
+                      color: buttonColor.withOpacity(0.8),
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context).pushReplacementNamed('/');
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20))),
-                        child: const Text(
-                          "SIGN UP",
-                          style: TextStyle(
-                              fontSize: 23,
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  ElevatedButton(
+                    onPressed: () => Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                            builder: (context) => const SignUpActivity())),
+                    style: ElevatedButton.styleFrom(
+                        // minimumSize: const Size(double.infinity, 50),
+                        backgroundColor: buttonColor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                          30,
+                        ))),
+                    child: _isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Text(
+                            "Sign up",
+                            style: TextStyle(
+                              fontSize: 18,
                               fontFamily: 'Poppins',
-                              color: buttonColor,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                  ]),
+                            ),
+                          ),
+                  ),
+
+                  // InkWell(
+                  //   onTap: () {
+                  //     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const SignUpActivity()));
+                  //   },
+                  //   child: Container(
+                  //     decoration: const BoxDecoration(
+                  //         borderRadius:
+                  //             BorderRadius.all(Radius.circular(20))),
+                  //     child: const Text(
+                  //       "Sign up",
+                  //       style: TextStyle(
+                  //           fontSize: 22,
+                  //           fontFamily: 'Poppins',
+                  //           color: buttonColor,
+                  //           fontWeight: FontWeight.w600),
+                  //     ),
+                  //   ),
+                  // ),
+                ],
+              ),
             ],
           ),
         ),
       ),
     );
   }
+}
+
+showSnackBarr(String content, BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(content)));
 }

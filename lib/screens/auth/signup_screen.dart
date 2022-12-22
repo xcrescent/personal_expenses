@@ -1,18 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:personal_expenses/controllers/auth.dart';
+import 'package:personal_expenses/screens/auth/login_screen.dart';
 import 'package:personal_expenses/screens/auth/verify_otp.dart';
 import 'package:personal_expenses/screens/ui/home.dart';
 import 'package:personal_expenses/utils/colors.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// class Credentials {
-//   final String email;
-//   final String password;
-
-//   const Credentials(this.email, this.password);
-// }
 
 class SignUpActivity extends StatefulWidget {
   const SignUpActivity({super.key});
@@ -57,20 +50,10 @@ class _SignUpActivity extends State<SignUpActivity>
 
   @override
   void dispose() {
-    // Clean up the controller when the widget is removed from the widget tree.
-    // This also removes the _printLatestValue listener.
     _emailController.dispose();
     _passController.dispose();
     super.dispose();
   }
-
-  // Uint8List? _image;
-  // selectImage() async {
-  //   // Uint8List im = await AuthController().pickImage(ImageSource.gallery);
-  //   setState(() {
-  //     // _image = im;
-  //   });
-  // }
 
   signUpUser() async {
     setState(() {
@@ -92,8 +75,10 @@ class _SignUpActivity extends State<SignUpActivity>
       if (!mounted) return;
       showSnackBarr('Enter the OTP sent to your email address', context);
       return Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) =>
-              VerifyOtpActivity(email: _emailController.text)));
+          builder: (context) => VerifyOtpActivity(
+                email: _emailController.text,
+                name: _fnameController.text,
+              )));
     }
   }
 
@@ -355,67 +340,95 @@ class _SignUpActivity extends State<SignUpActivity>
                       height: 25,
                     ),
                     Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            "Already have an Account?",
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: buttonColor.withOpacity(0.8),
-                              fontFamily: 'Poppins',
-                              // fontWeight: FontWeight.bold
-                            ),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          "Already have an Account?",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: buttonColor.withOpacity(0.8),
+                            fontFamily: 'Poppins',
+                            // fontWeight: FontWeight.bold
                           ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.of(context)
-                                  .pushReplacementNamed('/login');
-                            },
-                            child: const Text(
-                              "Login",
-                              style: TextStyle(
-                                fontSize: 22,
-                                color: buttonColor,
-                                fontFamily: 'Poppins',
-                              ),
-                            ),
-                          ),
-                        ]),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                              builder: (context) => const HomeScreen()),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
                         ),
-                        backgroundColor: buttonColor,
-                      ),
-                      child: _isLoading
-                          ? const Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                              ),
-                            )
-                          : const Text(
-                              "Skip Now",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                fontFamily: 'Poppins',
-                              ),
-                            ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        ElevatedButton(
+                          onPressed: () => Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                                  builder: (context) =>
+                                      const LoginActivity())),
+                          style: ElevatedButton.styleFrom(
+                              // minimumSize: const Size(double.infinity, 50),
+                              backgroundColor: buttonColor,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                30,
+                              ))),
+                          child: _isLoading
+                              ? const Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : const Text(
+                                  "Login",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                        ),
+
+                        // InkWell(
+                        //   onTap: () {
+                        //     Navigator.of(context)
+                        //         .pushReplacementNamed('/login');
+                        //   },
+                        //   child: const Text(
+                        //     "Login",
+                        //     style: TextStyle(
+                        //       fontSize: 22,
+                        //       color: buttonColor,
+                        //       fontFamily: 'Poppins',
+                        //     ),
+                        //   ),
+                        // ),
+                      ],
                     ),
+                    // const SizedBox(
+                    //   height: 30,
+                    // ),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     Navigator.of(context).pushReplacement(
+                    //       MaterialPageRoute(
+                    //           builder: (context) => const HomeScreen(name: "Waseem Akram", res: {},)),
+                    //     );
+                    //   },
+                    //   style: ElevatedButton.styleFrom(
+                    //     minimumSize: const Size(double.infinity, 50),
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(30),
+                    //     ),
+                    //     backgroundColor: buttonColor,
+                    //   ),
+                    //   child: _isLoading
+                    //       ? const Center(
+                    //           child: CircularProgressIndicator(
+                    //             color: Colors.white,
+                    //           ),
+                    //         )
+                    //       : const Text(
+                    //           "Skip Now",
+                    //           style: TextStyle(
+                    //             fontWeight: FontWeight.bold,
+                    //             fontSize: 18,
+                    //             fontFamily: 'Poppins',
+                    //           ),
+                    //         ),
+                    // ),
                   ]),
             ),
           ),
@@ -423,4 +436,8 @@ class _SignUpActivity extends State<SignUpActivity>
       ),
     ));
   }
+}
+
+showSnackBarr(String content, BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(content)));
 }

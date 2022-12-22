@@ -3,12 +3,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:personal_expenses/controllers/auth.dart';
+import 'package:personal_expenses/screens/auth/login_screen.dart';
 import 'package:personal_expenses/screens/ui/home.dart';
 import 'package:personal_expenses/utils/colors.dart';
 
 class VerifyOtpActivity extends StatefulWidget {
-  const VerifyOtpActivity({super.key, required this.email});
-  final email;
+  const VerifyOtpActivity({super.key, required this.email, required this.name});
+  final String email;
+  final String name;
   @override
   State<VerifyOtpActivity> createState() => _VerifyOtpActivityState();
 }
@@ -16,6 +18,7 @@ class VerifyOtpActivity extends StatefulWidget {
 class _VerifyOtpActivityState extends State<VerifyOtpActivity> {
   final _otpController = TextEditingController();
   bool _isLoading = false;
+  bool _isLoading2 = false;
   bool activeConnection = false;
   String T = "";
   Future checkUserConnection() async {
@@ -24,7 +27,6 @@ class _VerifyOtpActivityState extends State<VerifyOtpActivity> {
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         setState(() {
           activeConnection = true;
-          // T = "Turn off the data and repress again";
         });
       }
     } on SocketException catch (_) {
@@ -45,6 +47,29 @@ class _VerifyOtpActivityState extends State<VerifyOtpActivity> {
   void dispose() {
     _otpController.dispose();
     super.dispose();
+  }
+
+  resendOtp() async {
+    setState(() {
+      _isLoading2 = true;
+    });
+    String res = await AuthController().reSendOtpignup(widget.email);
+    if (res != 'success') {
+      setState(() {
+        _isLoading2 = false;
+      });
+      if (!mounted) return;
+      return showSnackBarr(res, context);
+    } else {
+      if (!mounted) return;
+      setState(() {
+        _isLoading2 = true;
+      });
+      showSnackBarr('Verify the otp sent to this email address', context);
+      // return Navigator.of(context).pushReplacement(MaterialPageRoute(
+      //   builder: (context) => ResetPassActivity(email: _emailController.text),
+      // ));
+    }
   }
 
   @override
@@ -110,6 +135,32 @@ class _VerifyOtpActivityState extends State<VerifyOtpActivity> {
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
               ),
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  resendOtp();
+                },
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  backgroundColor: buttonColor,
+                ),
+                child: _isLoading2
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text(
+                        "Resend OTP",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+              ),
             ],
           ),
         ),
@@ -135,7 +186,8 @@ class _VerifyOtpActivityState extends State<VerifyOtpActivity> {
     } else {
       if (!mounted) return;
       showSnackBarr('OTP verified successfully', context);
-      return Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> HomeScreen()));
+      return Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const LoginActivity()));
     }
   }
 }
@@ -143,3 +195,7 @@ class _VerifyOtpActivityState extends State<VerifyOtpActivity> {
 // void main() {
 //   print(int.parse("603786"));
 // }
+
+showSnackBarr(String content, BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(content)));
+}

@@ -27,7 +27,7 @@ class CategoryWidget extends StatelessWidget {
                 height: 64,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Color(0xffFFFFFF),
+                  color: const Color(0xffFFFFFF),
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: const Color(0xFFEEEEEE),
