@@ -1,4 +1,4 @@
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'dart:convert';
 
 class AuthController {
@@ -15,14 +15,13 @@ class AuthController {
   }
 
   Future<String> signUpUsingEmailPassword(email, pass, fname) async {
-    final response = await http.post(
-        Uri.parse(
-            'https://auth-backend-production-054a.up.railway.app/api/v1/auth/signup'),
-        body: json.encode({
+    final response = await Dio().post(
+        'https://auth-backend-production-054a.up.railway.app/api/v1/auth/signup',
+        data: {
           "name": capitalizeAllWord(fname),
           "email": email,
           "password": pass
-        }));
+        });
     if (response.statusCode == 200) {
       return "success";
     } else {
@@ -31,10 +30,9 @@ class AuthController {
   }
 
   Future signUpVerifyOtp(int otp, String email) async {
-    final response = await http.post(
-        Uri.parse(
-            'https://auth-backend-production-054a.up.railway.app/api/v1/auth/verify'),
-        body: json.encode({"otp": otp, "email": email}));
+    final response = await Dio().post(
+        'https://auth-backend-production-054a.up.railway.app/api/v1/auth/verify',
+        data: {"otp": otp, "email": email});
     if (response.statusCode == 200) {
       return "success";
     } else {
@@ -43,10 +41,9 @@ class AuthController {
   }
 
   Future<String> sendOtp(email) async {
-    final response = await http.post(
-        Uri.parse(
-            'https://auth-backend-production-054a.up.railway.app/api/v1/auth/send-otp'),
-        body: json.encode({"email": email, "for_signup": false}));
+    final response = await Dio().post(
+        'https://auth-backend-production-054a.up.railway.app/api/v1/auth/send-otp',
+        data: {"email": email, "for_signup": false});
     if (response.statusCode == 200) {
       return "success";
     } else {
@@ -55,10 +52,13 @@ class AuthController {
   }
 
   Future<String> reSendOtpignup(email) async {
-    final response = await http.post(
-        Uri.parse(
-            'https://auth-backend-production-054a.up.railway.app/api/v1/auth/send-otp'),
-        body: json.encode({"email": email, "for_signup": true}));
+    // final response = await http.post(
+    //     Uri.parse(
+    //         'https://auth-backend-production-054a.up.railway.app/api/v1/auth/send-otp'),
+    //     body: json.encode({"email": email, "for_signup": true}));
+    final response = await Dio().post(
+        'https://auth-backend-production-054a.up.railway.app/api/v1/auth/send-otp',
+        data: {"email": email, "for_signup": true});
     if (response.statusCode == 200) {
       return "success";
     } else {
@@ -67,12 +67,15 @@ class AuthController {
   }
 
   Future<Map<String, dynamic>> signInUsingEmailPassword(email, pass) async {
-    final response = await http.post(
-        Uri.parse(
-            'https://auth-backend-production-054a.up.railway.app/api/v1/auth/login'),
-        body: json.encode({"email": email, "password": pass}));
+    // final response = await http.post(
+    //     Uri.parse(
+    //         'https://auth-backend-production-054a.up.railway.app/api/v1/auth/login'),
+    //     body: json.encode({"email": email, "password": pass}));
+    final response = await Dio().post(
+        'https://auth-backend-production-054a.up.railway.app/api/v1/auth/login',
+        data: {"email": email, "password": pass});
     if (response.statusCode == 200) {
-      AccessToken accessTokens = accessTokenFromJson(response.body);
+      AccessToken accessTokens = accessTokenFromJson(response.data);
 
       print(accessTokens.accessToken);
       print(accessTokens.refreshToken);
@@ -88,10 +91,9 @@ class AuthController {
   }
 
   Future resetPasswordUsingOtp(otp, email, newPass) async {
-    final response = await http.post(
-      Uri.parse(
-          'https://auth-backend-production-054a.up.railway.app/api/v1/auth/reset'),
-      body: json.encode(
+    final response = await Dio().post(
+      'https://auth-backend-production-054a.up.railway.app/api/v1/auth/reset',
+      data: json.encode(
         {"otp": otp, "email": email, "new_password": newPass},
       ),
     );
@@ -103,11 +105,14 @@ class AuthController {
   }
 
   Future<String> authChanges(String accessToken) async {
-    final response = await http.get(
-        Uri.parse('https://auth-backend-production-054a.up.railway.app/api/v1'),
-        headers: ({'Authorization': 'Bearer $accessToken'}));
+    final response = await Dio(
+        BaseOptions(headers: {'Authorization': 'Bearer $accessToken'})).get(
+      'https://auth-backend-production-054a.up.railway.app/api/v1',
+    );
+
+    // headers: ({'Authorization': 'Bearer $accessToken'}));
     if (response.statusCode == 200) {
-      AuthData authData = authDataFromJson(response.body);
+      AuthData authData = authDataFromJson(response.data);
       final split = authData.message.split('Hello, ');
       split[0] = split[1].split('!')[0];
       return capitalizeAllWord(split[0]);
@@ -164,7 +169,7 @@ class AccessToken {
 
 // void main() {
 //   // AuthController().signInUsingOtp();
-//   AuthController().authChanges();
+//   AuthController().sendOtp('whataboutadate@gmail.com');
 // }
 
 // utkarsh2110024@akgec.ac.in

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:personal_expenses/controllers/auth.dart';
+
 import 'package:personal_expenses/controllers/db.dart';
 import 'package:personal_expenses/screens/auth/forgot_pass.dart';
 import 'package:personal_expenses/screens/auth/login_screen.dart';
-import 'package:personal_expenses/screens/auth/signup_screen.dart';
 import 'package:personal_expenses/controllers/model.dart';
 import 'package:personal_expenses/screens/ui/home.dart';
 
@@ -35,25 +34,29 @@ class MaterialStoreApp extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data!.isNotEmpty) {
-              return FutureBuilder(
-                  future: AuthController()
-                      .authChanges(snapshot.data![0].accessToken),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    if (snapshot.hasData) {
-                      // SchedulerBinding.instance.addPostFrameCallback((_) {
-                      if (snapshot.data != "Null") {
-                        return HomeScreen(name: snapshot.data!, res: {});
-                      }
-                    }
-                    return const SignUpActivity();
-                  });
+              // temporary fix
+              return HomeScreen(name: "name", res: {});
+              // FutureBuilder(
+              //     future: AuthController()
+              //         .authChanges(snapshot.data![0].accessToken),
+              //     builder: (context, snapshot) {
+              //       if (snapshot.connectionState == ConnectionState.waiting) {
+              //         return const Center(
+              //           child: CircularProgressIndicator(),
+              //         );
+              //       }
+              //       if (snapshot.hasData) {
+              //         // SchedulerBinding.instance.addPostFrameCallback((_) {
+              //         if (snapshot.data != "Null") {
+              //           return HomeScreen(name: snapshot.data!, res: {});
+              //         }
+              //       }
+              //       return const SignUpActivity();
+              //     });
             } else {
-              return SignUpActivity();
+              return HomeScreen(name: "name", res: {});
+              // temporary fix
+              // return SignUpActivity();
             }
           } else {
             return const Center(child: CircularProgressIndicator());
