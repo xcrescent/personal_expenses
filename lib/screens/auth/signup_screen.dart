@@ -1,10 +1,10 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_expenses/controllers/auth.dart';
 import 'package:personal_expenses/screens/auth/login_screen.dart';
 import 'package:personal_expenses/screens/auth/verify_otp.dart';
-import 'package:personal_expenses/screens/ui/home.dart';
 import 'package:personal_expenses/utils/colors.dart';
 
 class SignUpActivity extends StatefulWidget {
@@ -45,7 +45,13 @@ class _SignUpActivity extends State<SignUpActivity>
   @override
   void initState() {
     super.initState();
-    checkUserConnection();
+    _emailController.text = "usjadon19@gmail.com";
+    _passController.text = "Utkarsh@123";
+    _fnameController.text = "Utkarsh";
+    _cpassController.text = "Utkarsh@123";
+    if(!kIsWeb) {
+      checkUserConnection();
+    }
   }
 
   @override
@@ -311,7 +317,7 @@ class _SignUpActivity extends State<SignUpActivity>
                           signUpUser();
                           // _fnameController.clear();
                         } else {
-                          // showSnackBarr('Please check your details', context);
+                          showSnackBarr('Please check your details', context);
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -357,8 +363,7 @@ class _SignUpActivity extends State<SignUpActivity>
                         ElevatedButton(
                           onPressed: () => Navigator.of(context)
                               .pushReplacement(MaterialPageRoute(
-                                  builder: (context) =>
-                                      const LoginActivity())),
+                                  builder: (context) => const LoginActivity())),
                           style: ElevatedButton.styleFrom(
                               // minimumSize: const Size(double.infinity, 50),
                               backgroundColor: buttonColor,
@@ -366,19 +371,13 @@ class _SignUpActivity extends State<SignUpActivity>
                                   borderRadius: BorderRadius.circular(
                                 30,
                               ))),
-                          child: _isLoading
-                              ? const Center(
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                  ),
-                                )
-                              : const Text(
-                                  "Login",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontFamily: 'Poppins',
-                                  ),
-                                ),
+                          child: const Text(
+                            "Login",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
                         ),
 
                         // InkWell(

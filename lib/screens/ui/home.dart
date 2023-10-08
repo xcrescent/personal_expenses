@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart';
 import 'package:personal_expenses/controllers/db.dart';
 import 'package:personal_expenses/controllers/model.dart';
-import 'package:personal_expenses/screens/auth/login_screen.dart';
 import 'package:personal_expenses/screens/auth/signup_screen.dart';
 import 'package:personal_expenses/widgets/Category.dart';
 import 'package:personal_expenses/widgets/add_transaction.dart';
@@ -13,7 +11,6 @@ import 'package:personal_expenses/widgets/bottom_nav.dart';
 import 'package:personal_expenses/widgets/end_widget.dart';
 import 'package:personal_expenses/widgets/offer_widger.dart';
 import 'package:personal_expenses/widgets/task_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.name, required this.res});
@@ -43,39 +40,39 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  getAllSavedData() async {
-    List<BoolCom> x = await handler.retrieveComUser();
-    if (x.isNotEmpty) {
-      if (x[0].boole == 1) {
-        boolKYC = true;
-      }
-    }
-    //  else {
-    // await handler.insertCom();
-    // }
-    setState(() {});
-  }
+  // getAllSavedData() async {
+  //   List<BoolCom> x = await handler.retrieveComUser();
+  //   if (x.isNotEmpty) {
+  //     if (x[0].boole == 1) {
+  //       boolKYC = true;
+  //     }
+  //   }
+  //   //  else {
+  //   // await handler.insertCom();
+  //   // }
+  //   setState(() {});
+  // }
 
-  late DataBaseCon handler;
-  Future<int> addUser() async {
-    User user = User(
-        id: 1,
-        accessToken: widget.res['accessToken'],
-        refreshToken: widget.res['refreshToken']);
+  // late DataBaseCon handler;
+  // Future<int> addUser() async {
+  //   User user = User(
+  //       id: 1,
+  //       accessToken: widget.res['accessToken'],
+  //       refreshToken: widget.res['refreshToken']);
 
-    return await handler.insertUser(user);
-  }
+  //   return await handler.insertUser(user);
+  // }
 
   @override
   void initState() {
     super.initState();
-    handler = DataBaseCon();
-    handler.initializedComDB();
-    handler.initializedDB().whenComplete(() async {
-      int m = await addUser();
-      setState(() {});
-    });
-    getAllSavedData();
+    // handler = DataBaseCon();
+    // handler.initializedComDB();
+    // handler.initializedDB().whenComplete(() async {
+    //   int m = await addUser();
+    //   setState(() {});
+    // });
+    // getAllSavedData();
   }
 
   @override
@@ -93,9 +90,11 @@ class _HomeScreenState extends State<HomeScreen> {
   // }
 
   logout() async {
-    await DataBaseCon().deleteUser(1).then((value) => Navigator.of(context)
-        .pushReplacement(
-            MaterialPageRoute(builder: (context) => const SignUpActivity())));
+    // await DataBaseCon().deleteUser(1).then((value) => Navigator.of(context)
+    //     .pushReplacement(
+    //         MaterialPageRoute(builder: (context) => const SignUpActivity())));
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const SignUpActivity()));
   }
 
   @override
@@ -103,7 +102,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(MediaQuery.of(context).size.width * 0.2),
+        preferredSize: Size.fromHeight((MediaQuery.of(context).size.width > 720
+                ? (MediaQuery.of(context).size.width / 3)
+                : MediaQuery.of(context).size.width) *
+            0.2),
         child: ClipRRect(
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
@@ -174,7 +176,10 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Padding(
             padding: EdgeInsets.only(
               left: MediaQuery.of(context).size.width * 0.05,
-              top: MediaQuery.of(context).size.width * 0.27,
+              top: (MediaQuery.of(context).size.width > 720
+                      ? MediaQuery.of(context).size.width / 3
+                      : MediaQuery.of(context).size.width) *
+                  0.27,
               right: MediaQuery.of(context).size.width * 0.05,
             ),
             child: Column(
@@ -257,10 +262,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(6.0),
+                      const Padding(
+                        padding: EdgeInsets.all(6.0),
                         child: Row(
-                          children: const [
+                          children: [
                             Text(
                               "₹18,000",
                               style: TextStyle(
@@ -379,11 +384,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         const EdgeInsets.all(
                                                             4.0),
                                                     decoration: BoxDecoration(
-                                                      color: Color(0xffE19500)
+                                                      color: const Color(
+                                                              0xffE19500)
                                                           .withOpacity(0.2),
                                                       borderRadius:
                                                           const BorderRadius
-                                                                  .all(
+                                                              .all(
                                                               Radius.circular(
                                                                   32)),
                                                     ),
@@ -391,7 +397,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       'assets/images/projected_saving.svg',
                                                       height: 16,
                                                       width: 16,
-                                                      color: Color(0xffE19500),
+                                                      color: const Color(
+                                                          0xffE19500),
                                                     )),
                                                 const SizedBox(
                                                   width: 6,
@@ -447,8 +454,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   padding:
                                                       const EdgeInsets.all(4.0),
                                                   decoration: BoxDecoration(
-                                                    color: Color(0xffEB6842)
-                                                        .withOpacity(0.25),
+                                                    color:
+                                                        const Color(0xffEB6842)
+                                                            .withOpacity(0.25),
                                                     borderRadius:
                                                         const BorderRadius.all(
                                                             Radius.circular(
@@ -458,7 +466,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     'assets/images/highest_spent.svg',
                                                     height: 16,
                                                     width: 16,
-                                                    color: Color(0xffEB6842),
+                                                    color:
+                                                        const Color(0xffEB6842),
                                                   ),
                                                 ),
                                                 const SizedBox(
@@ -536,7 +545,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       vertical: 1,
                                                       horizontal: 5),
                                               decoration: BoxDecoration(
-                                                color: Color(0xffE13B30)
+                                                color: const Color(0xffE13B30)
                                                     .withOpacity(0.26),
                                                 borderRadius:
                                                     const BorderRadius.all(
@@ -639,12 +648,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                               const EdgeInsets.only(bottom: 8),
                                           width: 188,
                                           height: 72,
-                                          child: Column(
+                                          child: const Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
-                                            children: const [
+                                            children: [
                                               Text(
                                                 "Pending KYC",
                                                 style: TextStyle(
@@ -668,7 +677,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                               backgroundColor:
-                                                  Color(0xFFE13B30),
+                                                  const Color(0xFFE13B30),
                                               fixedSize: const Size(148, 39),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
@@ -679,7 +688,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               boolKYC = true;
                                             });
 
-                                            await handler.insertCom();
+                                            // await handler.insertCom();
                                           },
                                           child: Text(
                                             "Complete Now",
@@ -737,10 +746,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                SingleChildScrollView(
+                const SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: const [
+                    children: [
                       CategoryWidget(
                         title: "Food",
                         svgPath: "assets/images/category/food.svg",
@@ -800,37 +809,37 @@ class _HomeScreenState extends State<HomeScreen> {
                         title: "01",
                         text: 'Complete KYC',
                         svgPath: "assets/images/task/key.png",
-                        color: Color(0xffF6EDD2),
+                        color: const Color(0xffF6EDD2),
                       ),
-                      TaskWidget(
+                      const TaskWidget(
                         kycdone: false,
                         title: "02",
                         text: 'Create Category',
                         svgPath: "assets/images/task/burger.png",
                         color: Color(0xffD6F4DE),
                       ),
-                      TaskWidget(
+                      const TaskWidget(
                         kycdone: false,
                         title: "03",
                         svgPath: "assets/images/task/moneymoji.png",
                         text: 'Set Limit to categ..',
                         color: Color(0xffFBEBCE),
                       ),
-                      TaskWidget(
+                      const TaskWidget(
                         kycdone: false,
                         title: "04",
                         svgPath: "assets/images/task/lap_man.png",
                         text: 'Add apps to categ..',
                         color: Color(0xffD3D6F1),
                       ),
-                      TaskWidget(
+                      const TaskWidget(
                         kycdone: false,
                         title: "05",
                         svgPath: "assets/images/task/cash_bag.png",
                         text: 'Make on taxn',
                         color: Color(0xffF7F0DC),
                       ),
-                      TaskWidget(
+                      const TaskWidget(
                         kycdone: false,
                         title: "06",
                         svgPath: "assets/images/task/cash.png",
@@ -856,7 +865,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                OfferWidget(),
+                const OfferWidget(),
                 Padding(
                   padding: const EdgeInsets.only(
                       left: 16.0, right: 16.0, top: 32.0, bottom: 8),
@@ -883,7 +892,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       bottomNavigationBar: Container(
-        padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
+        padding: EdgeInsets.all((MediaQuery.of(context).size.width > 720
+                ? MediaQuery.of(context).size.width / 3
+                : MediaQuery.of(context).size.width) *
+            0.05),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
           child: Container(
@@ -893,8 +905,8 @@ class _HomeScreenState extends State<HomeScreen> {
               horizontal: 8.0,
             ),
             decoration: BoxDecoration(
-              border: Border.all(color: Color(0xffEEEEEE), width: 1),
-              borderRadius: BorderRadius.all(Radius.elliptical(20, 20)),
+              border: Border.all(color: const Color(0xffEEEEEE), width: 1),
+              borderRadius: const BorderRadius.all(Radius.elliptical(20, 20)),
               color: Colors.white,
               boxShadow: [
                 // BoxShadow(
@@ -909,7 +921,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 //   offset: Offset(-10, -10),
                 //   spreadRadius: 20,
                 // ),
-                BoxShadow(
+                const BoxShadow(
                   // offset: Offset(0, 2),
                   color: Colors.grey,
                   blurStyle: BlurStyle.outer,
@@ -946,7 +958,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
                       backgroundColor:
-                          selected[3]! ? Color(0xffE8EAF6) : Colors.white,
+                          selected[3]! ? const Color(0xffE8EAF6) : Colors.white,
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(50))),
                     ),

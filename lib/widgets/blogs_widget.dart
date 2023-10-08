@@ -71,7 +71,9 @@ class BlogsWidget extends StatelessWidget {
                           ),
                         ),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.031,
+                          width: MediaQuery.of(context).size.width > 720
+                              ? (MediaQuery.of(context).size.width / 6) * 0.031
+                              : MediaQuery.of(context).size.width * 0.031,
                         ),
                         const Text(
                           "Ann Korkowski",
@@ -83,7 +85,9 @@ class BlogsWidget extends StatelessWidget {
                           ),
                         ),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.13,
+                          width: MediaQuery.of(context).size.width > 720
+                              ? (MediaQuery.of(context).size.width / 6) * 0.13
+                              : MediaQuery.of(context).size.width * 0.13,
                         ),
                         const Text(
                           "08/09/2022",

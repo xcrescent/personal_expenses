@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:personal_expenses/controllers/auth.dart';
@@ -40,7 +41,13 @@ class _VerifyOtpActivityState extends State<VerifyOtpActivity> {
   @override
   void initState() {
     super.initState();
-    checkUserConnection();
+    if (kIsWeb) {
+      setState(() {
+        activeConnection = true;
+      });
+    } else {
+      checkUserConnection();
+    }
   }
 
   @override
@@ -172,22 +179,29 @@ class _VerifyOtpActivityState extends State<VerifyOtpActivity> {
     setState(() {
       _isLoading = true;
     });
-    String res = await AuthController().signUpVerifyOtp(
+    final res = await AuthController().signUpVerifyOtp(
       int.parse(_otpController.text),
       widget.email,
     );
-
-    if (res != 'success') {
+    print(res['status']);
+    String name = await AuthController().authChanges(res['accessToken']);
+    if (res['status'] != 'success') {
       setState(() {
         _isLoading = false;
       });
       if (!mounted) return;
-      return showSnackBarr(res, context);
+      return showSnackBarr(res['status'], context);
     } else {
       if (!mounted) return;
       showSnackBarr('OTP verified successfully', context);
       return Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const LoginActivity()));
+        MaterialPageRoute(
+          builder: (context) => HomeScreen(
+            name: name,
+            res: res,
+          ),
+        ),
+      );
     }
   }
 }

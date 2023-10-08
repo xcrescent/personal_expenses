@@ -2,6 +2,7 @@
 // default login on signup and pass change
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_expenses/controllers/auth.dart';
 import 'package:personal_expenses/controllers/db.dart';
@@ -47,7 +48,7 @@ class _LoginActivity extends State<LoginActivity>
     });
     Map res = await AuthController()
         .signInUsingEmailPassword(_emailController.text, _passController.text);
-    String name = await AuthController().authChanges(res['accessToken']);
+    // String name = await AuthController().authChanges(res['accessToken']);
     if (res['status'] != 'success') {
       setState(() {
         _isLoading = false;
@@ -61,7 +62,7 @@ class _LoginActivity extends State<LoginActivity>
       return Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => HomeScreen(
-            name: name,
+            name: "name",
             res: res,
           ),
         ),
@@ -72,7 +73,15 @@ class _LoginActivity extends State<LoginActivity>
   @override
   void initState() {
     super.initState();
-    checkUserConnection();
+    _emailController.text = "usjadon19@gmail.com";
+    _passController.text = "Utkarsh@123";
+    if (kIsWeb) {
+      setState(() {
+        activeConnection = true;
+      });
+    } else {
+      checkUserConnection();
+    }
   }
 
   @override
@@ -217,13 +226,7 @@ class _LoginActivity extends State<LoginActivity>
                             borderRadius: BorderRadius.circular(
                           30,
                         ))),
-                    child: _isLoading
-                        ? const Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                            ),
-                          )
-                        : const Text(
+                    child:const Text(
                             "Sign up",
                             style: TextStyle(
                               fontSize: 18,

@@ -13,8 +13,8 @@ class TaskWidget  extends StatelessWidget{
     return 
           Container(
             margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-            width: 156,
-            height: 152,
+            width: 156*MediaQuery.of(context).size.width/375,
+            height: 152*MediaQuery.of(context).size.height/750,
             decoration: BoxDecoration(
               border: Border.all(width: 0.1, color: Colors.grey),
               borderRadius: BorderRadius.circular(15),

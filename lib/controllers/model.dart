@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class User {
   late final int id;
   late final String accessToken;
