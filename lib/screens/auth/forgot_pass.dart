@@ -16,7 +16,7 @@ class _ForgotPassActivity extends State<ForgotPassActivity> {
 
   @override
   initState() {
-    _emailController.text = 'utkarshsinghjadon196@gmail.com';
+    // _emailController.text = 'utkarshsinghjadon196@gmail.com';
     super.initState();
   }
 

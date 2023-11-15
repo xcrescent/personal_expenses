@@ -73,8 +73,8 @@ class _LoginActivity extends State<LoginActivity>
   @override
   void initState() {
     super.initState();
-    _emailController.text = "utkarshsinghjadon196@gmail.com";
-    _passController.text = "Utkarsh@123";
+    // _emailController.text = "utkarshsinghjadon196@gmail.com";
+    // _passController.text = "Utkarsh@123";
     if (kIsWeb) {
       setState(() {
         activeConnection = true;
