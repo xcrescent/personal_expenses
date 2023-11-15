@@ -265,6 +265,7 @@ class _SignUpActivity extends State<SignUpActivity>
                             .hasMatch(value!))) {
                           return "Must have at least one lowercase, one uppercase , \none number, one special character and length at least 8";
                         }
+                        return null;
                       },
                     ),
                     const SizedBox(

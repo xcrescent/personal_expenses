@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:personal_expenses/controllers/db.dart';
-import 'package:personal_expenses/controllers/model.dart';
 import 'package:personal_expenses/screens/auth/signup_screen.dart';
 import 'package:personal_expenses/widgets/Category.dart';
 import 'package:personal_expenses/widgets/add_transaction.dart';
