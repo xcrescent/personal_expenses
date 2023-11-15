@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:personal_expenses/controllers/auth.dart';
@@ -45,11 +46,11 @@ class _SignUpActivity extends State<SignUpActivity>
   @override
   void initState() {
     super.initState();
-    _emailController.text = "usjadon19@gmail.com";
+    _emailController.text = "utkarshsinghjadon196@gmail.com";
     _passController.text = "Utkarsh@123";
     _fnameController.text = "Utkarsh";
     _cpassController.text = "Utkarsh@123";
-    if(!kIsWeb) {
+    if (!kIsWeb) {
       checkUserConnection();
     }
   }
@@ -65,18 +66,28 @@ class _SignUpActivity extends State<SignUpActivity>
     setState(() {
       _isLoading = true;
     });
-    String res = await AuthController().signUpUsingEmailPassword(
+    Response<dynamic> res = await AuthController().signUpUsingEmailPassword(
       _emailController.text,
       _passController.text,
       _fnameController.text,
     );
 
-    if (res != 'success') {
+    if (res.statusCode != 201) {
       setState(() {
         _isLoading = false;
       });
+
       if (!mounted) return;
-      return showSnackBarr(res, context);
+      if (res.statusCode == 401) {
+        showSnackBarr(res.data, context);
+        return Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => VerifyOtpActivity(
+                  email: _emailController.text,
+                  name: _fnameController.text,
+                )));
+      } else {
+        return showSnackBarr(res.data, context);
+      }
     } else {
       if (!mounted) return;
       showSnackBarr('Enter the OTP sent to your email address', context);

@@ -1,10 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:personal_expenses/controllers/auth.dart';
-import 'package:personal_expenses/screens/auth/login_screen.dart';
 import 'package:personal_expenses/screens/ui/home.dart';
 import 'package:personal_expenses/utils/colors.dart';
 
@@ -60,7 +59,7 @@ class _VerifyOtpActivityState extends State<VerifyOtpActivity> {
     setState(() {
       _isLoading2 = true;
     });
-    String res = await AuthController().reSendOtpignup(widget.email);
+    String res = await AuthController().reSendOtpSignup(widget.email);
     if (res != 'success') {
       setState(() {
         _isLoading2 = false;
@@ -70,7 +69,7 @@ class _VerifyOtpActivityState extends State<VerifyOtpActivity> {
     } else {
       if (!mounted) return;
       setState(() {
-        _isLoading2 = true;
+        _isLoading2 = false;
       });
       showSnackBarr('Verify the otp sent to this email address', context);
       // return Navigator.of(context).pushReplacement(MaterialPageRoute(

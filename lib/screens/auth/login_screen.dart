@@ -48,7 +48,7 @@ class _LoginActivity extends State<LoginActivity>
     });
     Map res = await AuthController()
         .signInUsingEmailPassword(_emailController.text, _passController.text);
-    // String name = await AuthController().authChanges(res['accessToken']);
+    String name = await AuthController().authChanges(res['accessToken']);
     if (res['status'] != 'success') {
       setState(() {
         _isLoading = false;
@@ -62,7 +62,7 @@ class _LoginActivity extends State<LoginActivity>
       return Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => HomeScreen(
-            name: "name",
+            name: name,
             res: res,
           ),
         ),
@@ -73,7 +73,7 @@ class _LoginActivity extends State<LoginActivity>
   @override
   void initState() {
     super.initState();
-    _emailController.text = "usjadon19@gmail.com";
+    _emailController.text = "utkarshsinghjadon196@gmail.com";
     _passController.text = "Utkarsh@123";
     if (kIsWeb) {
       setState(() {
@@ -226,13 +226,13 @@ class _LoginActivity extends State<LoginActivity>
                             borderRadius: BorderRadius.circular(
                           30,
                         ))),
-                    child:const Text(
-                            "Sign up",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: 'Poppins',
-                            ),
-                          ),
+                    child: const Text(
+                      "Sign up",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
                   ),
 
                   // InkWell(

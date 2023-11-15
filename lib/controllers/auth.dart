@@ -1,23 +1,29 @@
-import 'package:dio/dio.dart';
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
 class AuthController {
-  final dio = Dio(BaseOptions(baseUrl: "http://localhost:3000"));
+  final dio =
+      Dio(BaseOptions(baseUrl: "https://aeronex-auth-prod.onrender.com"));
   String capitalizeAllWord(String value) {
-    var result = value[0].toUpperCase();
-    for (int i = 1; i < value.length; i++) {
-      if (value[i - 1] == " ") {
-        result = result + value[i].toUpperCase();
-      } else {
-        result = result + value[i];
+    try {
+      var result = value[0].toUpperCase();
+      for (int i = 1; i < value.length; i++) {
+        if (value[i - 1] == " ") {
+          result = result + value[i].toUpperCase();
+        } else {
+          result = result + value[i];
+        }
       }
+      return result;
+    } catch (e) {
+      print(e);
+      return value;
     }
-    return result;
   }
 
-  Future<String> signUpUsingEmailPassword(email, pass, fname) async {
+  Future<Response> signUpUsingEmailPassword(email, pass, fname) async {
     try {
       final response = await dio.post('/api/v1/auth/register', data: {
         "name": capitalizeAllWord(fname),
@@ -29,48 +35,62 @@ class AuthController {
         print(response.statusCode);
       }
       if (response.statusCode == 201) {
-        return "success";
+        return response;
       } else {
-        return "bad request";
+        return response;
       }
-    } catch (e) {
-      print(e);
-      return "bad request";
+    } on DioError catch (e) {
+      return e.response!;
     }
   }
 
   Future<Map<String, dynamic>> signUpVerifyOtp(int otp, String email) async {
-    final response = await dio
-        .post('/api/v1/auth/verify', data: {"otp": otp, "email": email});
-    if (response.statusCode == 200) {
-      return {
-        'status': 'success',
-        // 'accessToken': response.data['access_token'],
-        // 'refreshToken': response.data['refresh_token'],
-      };
-    } else {
+    try {
+      final response = await dio
+          .post('/api/v1/auth/verify', data: {"otp": otp, "email": email});
+      if (response.statusCode == 200) {
+        print("Response ${response.data['message']}");
+
+        return {
+          'status': 'success',
+          'message': response.data['message'],
+          'accessToken': response.data['accessToken'],
+          'refreshToken': response.data['refreshToken'],
+        };
+      } else {
+        return {'status': 'bad request'};
+      }
+    } catch (e) {
+      print(e);
       return {'status': 'bad request'};
     }
   }
 
   Future<String> sendOtp(email) async {
-    final response = await dio.post('/api/v1/auth/send-otp',
-        data: {"email": email, "for_signup": false});
-    if (response.statusCode == 200) {
-      return "success";
-    } else {
-      return "bad request";
+    try {
+      final response = await dio.post('/api/v1/auth/send-otp',
+          data: {"email": email, "for_signup": false});
+      if (response.statusCode == 201) {
+        return "success";
+      } else {
+        return "bad request";
+      }
+    } on DioError catch (e) {
+      if (kDebugMode) {
+        print(e.response!.data);
+      }
+      return e.response!.data;
     }
   }
 
-  Future<String> reSendOtpignup(email) async {
+  Future<String> reSendOtpSignup(email) async {
     // final response = await http.post(
     //     Uri.parse(
     //         '/api/v1/auth/send-otp'),
     //     body: json.encode({"email": email, "for_signup": true}));
     final response = await dio.post('/api/v1/auth/send-otp',
         data: {"email": email, "for_signup": true});
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       return "success";
     } else {
       return "bad request";
@@ -110,18 +130,25 @@ class AuthController {
   }
 
   Future<String> authChanges(String accessToken) async {
-    final response = await Dio(
-        BaseOptions(headers: {'Authorization': 'Bearer $accessToken'})).get(
-      'http://localhost:3000/api/v1',
-    );
+    try {
+      final response = await Dio(
+          BaseOptions(headers: {'Authorization': 'Bearer $accessToken'})).get(
+        'https://aeronex-auth-prod.onrender.com/api/v1',
+      );
 
-    // headers: ({'Authorization': 'Bearer $accessToken'}));
-    if (response.statusCode == 200) {
-      return capitalizeAllWord(response.data['message'].split('Hello, ')[0]);
-      // final split = authData.message.split('Hello, ');
-      // split[0] = split[1].split('!')[0];
-      // return capitalizeAllWord(split[0]);
-    } else {
+      // headers: ({'Authorization': 'Bearer $accessToken'}));
+      if (response.statusCode == 200) {
+        print("Message : ${response.data['message'].split('Hello, ')[1]}");
+        return response.data['message'].split('Hello, ')[1];
+        // return capitalizeAllWord(response.data['message'].split('Hello, ')[0]);
+        // final split = authData.message.split('Hello, ');
+        // split[0] = split[1].split('!')[0];
+        // return capitalizeAllWord(split[0]);
+      } else {
+        return "Null";
+      }
+    } catch (e) {
+      print(e);
       return "Null";
     }
   }

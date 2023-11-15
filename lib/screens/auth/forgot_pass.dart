@@ -14,6 +14,12 @@ class _ForgotPassActivity extends State<ForgotPassActivity> {
   bool _isLoading = false;
   final _emailController = TextEditingController();
 
+  @override
+  initState() {
+    _emailController.text = 'utkarshsinghjadon196@gmail.com';
+    super.initState();
+  }
+
   sendOtp() async {
     setState(() {
       _isLoading = true;
@@ -38,8 +44,8 @@ class _ForgotPassActivity extends State<ForgotPassActivity> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: buttonColor,
-          ),
+        backgroundColor: buttonColor,
+      ),
       body: SingleChildScrollView(
         child: Container(
           alignment: Alignment.center,
